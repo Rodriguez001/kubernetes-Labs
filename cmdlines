@@ -1,0 +1,31 @@
+# Pour afficher l''ensemble des noeuds 
+kubectl get noeuds
+# Pour deployer des pods de façon déclarative avec des fichiers manifests
+kubectl apply -f <chemin_vers_manifest.yml>
+# pour voir les pods
+kubectl get pod
+# pour faire un inspect comme dans docker
+kubectl describe pod [name_of_pod]
+# pour supprimer un pod
+kubectl delete -f < manifest_file.yml >
+# pour lancer la creation d'un deployment
+kubectl apply -f <chemin_vers_deployer.yml>
+# pour afficher l''ensemble des deployments
+kubectl get deployments.apps
+# pour afficher l''ensemble des replications
+kubectl get replicasets.apps -o wide
+# Créer le pod en ligne de command(ici restart=never permet de dire que l'on veut créer un pod et non un deployement)
+run --image=mmumshad/simple-webapp-color --env="APP_COLOR=red" --restart=Never simple-webapp-color
+# on l'expose sur un port
+kubectl port-forward simple-webapp-color 8080:8080 --address 0.0.0.0
+# Pour creer un deployment
+kubectl create deployment --image=nginx:1.18.0 nginx-deployment
+# On va scaler pour créer les replicas
+kubectl scale --replicas=2 deployment/nginx:1.18.0
+# On verifie le deployement et replicas
+kubectl get deploy -o wide 
+kubectl get replicasets.apps -o wide 
+
+
+
+
