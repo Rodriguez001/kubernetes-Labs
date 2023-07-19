@@ -1,31 +1,174 @@
-# Pour afficher l''ensemble des noeuds 
+# Pour afficher l''ensemble des noeuds
+
 kubectl get noeuds
+
 # Pour deployer des pods de façon déclarative avec des fichiers manifests
+
 kubectl apply -f <chemin_vers_manifest.yml>
+
 # pour voir les pods
+
 kubectl get pod
+
 # pour faire un inspect comme dans docker
+
 kubectl describe pod [name_of_pod]
+
 # pour supprimer un pod
+
 kubectl delete -f < manifest_file.yml >
+
 # pour lancer la creation d'un deployment
+
 kubectl apply -f <chemin_vers_deployer.yml>
+
 # pour afficher l''ensemble des deployments
+
 kubectl get deployments.apps
+
 # pour afficher l''ensemble des replications
+
 kubectl get replicasets.apps -o wide
+
 # Créer le pod en ligne de command(ici restart=never permet de dire que l'on veut créer un pod et non un deployement)
-run --image=mmumshad/simple-webapp-color --env="APP_COLOR=red" --restart=Never simple-webapp-color
+
+kubectl run --image=mmumshad/simple-webapp-color --env="APP_COLOR=red" --restart=Never simple-webapp-color
+
 # on l'expose sur un port
+
 kubectl port-forward simple-webapp-color 8080:8080 --address 0.0.0.0
+
 # Pour creer un deployment
+
 kubectl create deployment --image=nginx:1.18.0 nginx-deployment
+
 # On va scaler pour créer les replicas
+
 kubectl scale --replicas=2 deployment/nginx:1.18.0
+
 # On verifie le deployement et replicas
-kubectl get deploy -o wide 
-kubectl get replicasets.apps -o wide 
 
+kubectl get deploy -o wide
+kubectl get replicasets.apps -o wide
 
+# LA GESTION DES RESEAUX
 
+# voir l'ensemble des pods avec leurs labels
 
+kubectl get po --show-labels
+
+# filtrer par rapport à un label
+
+# les pods dont le label = "nginx"
+
+kubectl get pods -l app=nginx --namespace=production
+#label n'appartenant pas à la production
+kubectl get pods -l env!=nginx --namespace=production
+
+# pods dont le label env à une valeur dans une liste
+
+kubectl get pods -l 'env in (production)' --namespace=production
+
+# le contraire
+
+kubectl get pods -l 'env notin (production)' --namespace=production
+
+# LES SERVICES
+
+# Création d'un service de type Nodeport
+
+# 1- d'abord un namespace de maniere declarative avec le fichier .yml
+
+kubectl apply -f [name_of_file_namespace.yml]
+
+# affichage d'un namespace particulier
+
+kubectl get all -n kube-node-lease
+
+# On peut créer le pod et préciser le namespace avec la cmd ou de maniere déclarative
+
+kubectl apply -f pod-red.yml -n production
+
+# voir l'ensemble des pods sur un namespace
+
+kubectl get pod -n [namespace]
+
+# Redaction du manifest d'un service de type Node-port
+
+# lancement d'un service grace au fichier manifest
+
+kubectl apply -f [name_of_file_service] -n [namespace]
+kubectl -n [namespace] describe svc [service_name]
+
+# inspecter le service
+
+kubectl get [service_name] -n [namespace]
+
+# Ingress – Problématique
+
+# Pour créer un cluster local
+
+minikube start
+
+# Autorisation du service ingress
+
+minikube addons enable ingress
+
+# verifier que l'ingress controller marche
+
+kubectl get pods -n ingress-nginx
+
+# Notre application ici c'est un déploiement
+
+kubectl create deployment web --image=gcr.io/google-samples/hello-app:1.0
+
+# On expose le deployment = creation d'un service nodeport qui va le desservir
+
+kubectl expose deployment web --type=NodePort --port=8080
+
+# verifier la creation du service
+
+kubectl get service web
+
+# Pour voir avec quelle url on va visiter le deployment
+
+minikube service web --url # http://10.0.2.15:30526
+
+# création des règles que l''ingress controller devra appliquer
+
+# Ensuite on apply
+
+kubectl apply -f exemple-ingress.yml
+
+# on peut lister nos règles
+
+kubectl get ingress
+
+# editer le fichier /etc/hosts et y ajouter
+
+10.0.2.15 hello-world.info
+
+# pour tester
+
+curl hello-world.info
+curl --resolve "hello-world.info:80:$( minikube ip )" -i http://hello-world.info
+
+# On crée un second deployment
+
+kubectl create deployment web2 --image=gcr.io/google-samples/hello-app:2.0
+
+# On crée le service
+
+kubectl expose deployment web2 --port=8080 --type=NodePort
+
+# On ajoute une règle dans le fichier ...ingress.yml et on apply
+
+kubectl apply -f [ingress_file.yml]
+
+# On accede à la 1ere version
+
+curl --resolve "hello-world.info:80:$( minikube ip )" -i http://hello-world.info
+
+# On accède à la 2eme version
+
+curl --resolve "hello-world.info:80:$( minikube ip )" -i http://hello-world.info/v2
