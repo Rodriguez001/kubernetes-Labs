@@ -194,9 +194,22 @@ https://github.com/diranetafen/supinfo-kubernetes/tree/minikube/tp07#-install-he
 
 # On peut verifier l'installation en listant les charts
 helm ls 
-# installer la chart de wordpress avec helm
+# installer la chart de wordpress avec helm v2
 helm install stable/wordpress --name wordpress -f values.yml
 # On peut verifier le resultat
 kubectl get pod
 kubectl get svc
 
+# HELM v3
+# Apres installation
+# Installation
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+chmod 700 get_helm.sh
+yum install openssl -y
+./get_helm.sh
+helm version
+# On recupere le repository
+# Déploiement WordPress
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm install wordpress bitnami/wordpress -f https://raw.githubusercontent.com/Rodriguez001/kubernetes-Labs/main/tp6/values.yml
+kubectl get svc
