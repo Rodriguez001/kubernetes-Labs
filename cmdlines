@@ -189,3 +189,14 @@ mysql-pv.yml
 
 ## Introduction à HELM
 
+# use the link below to install Helm
+https://github.com/diranetafen/supinfo-kubernetes/tree/minikube/tp07#-install-helm-
+
+# On peut verifier l'installation en listant les charts
+helm ls 
+# installer la chart de wordpress avec helm
+helm install stable/wordpress --name wordpress -f values.yml
+# On peut verifier le resultat
+kubectl get pod
+kubectl get svc
+
