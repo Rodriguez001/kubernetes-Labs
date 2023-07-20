@@ -181,3 +181,11 @@ kubectl apply -f [nom_de_ressources]
 kubectl get pv 
 kubectl describe pod [nom_du_pod]
 kubectl describe pv [nom_pv]
+# l'ordre de creation pour les volumes
+mysql-volume.yml
+pv.yml
+pvc.yml
+mysql-pv.yml
+
+## Introduction à HELM
+
