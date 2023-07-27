@@ -213,3 +213,14 @@ helm version
 helm repo add bitnami https://charts.bitnami.com/bitnami
 helm install wordpress bitnami/wordpress -f https://raw.githubusercontent.com/Rodriguez001/kubernetes-Labs/main/tp6/values.yml
 kubectl get svc
+
+# Mini-projet : installation de Wordpress
+pour generer un manifest
+# ajouter à la fin 
+kubectl create namespace [namespace] --dry-run=client -o yaml > [dans un fichier.yml] 
+# pour voir si un svc fonction
+kubectl describe -f [fichier.yml]
+# verifier tout ses objets sur un namespace ici "wordpress"
+kubectl get all -n wordpress
+# creation d'un  compte AWS
+
