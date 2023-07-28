@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ihm-api
+  labels:
+    app: studenlist
+    tier: frontend
+  namespace: studentlist
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      app: studentlist
+      tier: frontend
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: studentlist
+        tier: frontend
+    spec:
+      containers:
+      - image: php:apache
+        name: ihm-api
+        env:
+        - name: USERNAME
+          value: toto
+        - name: PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: studentlist-secret
+              key: PASSWORD
+        ports:
+        - containerPort: 80
+          name: ihm-api
+        volumeMounts:
+        - name: php-persistent-storage
+          mountPath: /var/www/html
+      volumes:
+      - name: php-persistent-storage
+        hostPath:
+          path: ./website
+
+

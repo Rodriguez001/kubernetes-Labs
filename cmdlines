@@ -224,3 +224,8 @@ kubectl describe -f [fichier.yml]
 kubectl get all -n wordpress
 # creation d'un  compte AWS
 
+## Pour avoir le context 
+kubectl config current-context
+
+## 
+
