@@ -27,9 +27,10 @@ spec:
           name: api
         volumeMounts:
         - name:  api-persistent-storage
-          mountPath:  /data/student_age.json
+          mountPath: /data
       volumes:
       - name:  api-persistent-storage
         hostPath:  
-          path: $PWD/simple_api/student_age.json
+          path: /home/vagrant/kubernetes-Labs/mini-projet2/student-list/simple_api
+          type: Directory
           

@@ -40,6 +40,7 @@ spec:
       volumes:
       - name: php-persistent-storage
         hostPath:
-          path: ./website
+          path: /home/vagrant/kubernetes-Labs/mini-projet2/student-list/website
+          type: Directory
 
 
